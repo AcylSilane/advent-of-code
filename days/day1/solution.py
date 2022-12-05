@@ -1,7 +1,6 @@
 # Advent of code 2022
 
 # File is small, let's just read it all into memory
-
 with open("input.csv", "r") as inp:
     data = inp.read().split("\n\n")
 totals = [sum(map(int, str.split(entry))) for entry in data]
