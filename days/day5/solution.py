@@ -45,21 +45,19 @@ with open("input.txt", "r") as inp:
         # ==============
         if state == states.MOVE_CRATES and line:
             # Interpret instruction
-            move_counter = int(re.search(r"(?<=move\s)\d+", line)[0])
+            move_size = int(re.search(r"(?<=move\s)\d+", line)[0])
             source_stack = re.search(r"(?<=from\s)\d+", line)[0]
             dest_stack = re.search(r"(?<=to\s)\d+", line)[0]
 
             # Carry out instruction, part 1
-            chunk_1 = stacks_part1[source_stack][-move_counter:]
-            stacks_part1[source_stack] = stacks_part1[source_stack][:-move_counter]
+            chunk_1 = stacks_part1[source_stack][-move_size:]
+            stacks_part1[source_stack] = stacks_part1[source_stack][:-move_size]
             stacks_part1[dest_stack].extend(reversed(chunk_1))
-            print(stacks_part1[source_stack])
 
             # Carry out instruction, part 2
-            chunk_2 = stacks_part2[source_stack][-move_counter:]
-            stacks_part2[source_stack] = stacks_part2[source_stack][:-move_counter]
+            chunk_2 = stacks_part2[source_stack][-move_size:]
+            stacks_part2[source_stack] = stacks_part2[source_stack][:-move_size]
             stacks_part2[dest_stack].extend(chunk_2)
-            print(stacks_part2[source_stack])
 
 # Part 1
 print(f"Part 1: {''.join(item[-1] for item in stacks_part1.values())}")
