@@ -1,6 +1,7 @@
 """Solution for day 11"""
 from __future__ import annotations
 from typing import TextIO, Callable, List, Dict
+import copy
 import math
 import operator
 import functools
@@ -87,7 +88,7 @@ class Monkey:
         self.items_inspected += 1
         logger.debug(f"\tMonkey inspects an item with a worry level of {item.worry}")
         old_worry = item.worry
-        new_worry = self.worry_update_fun(old_worry)
+        new_worry = self.worry_update_fun(old_worry) % self.troop.max_divisor
         item.worry = new_worry
         logger.debug(f"\t\tWorry level is now {item.worry}.")
 
@@ -108,7 +109,7 @@ class Monkey:
             item = self.items.pop(0)
             self.inspect_item(item)
             if self.troop.is_hopeful:
-                item.worry = int(math.floor(item.worry / 3))
+                item.worry = int(math.floor(item.worry / 3)) % self.troop.max_divisor
             logger.debug(f"\t\tMonkey gets bored with item. Worry level is divided by 3 to {item.worry}")
             if self.is_worried(item):
                 logger.debug(f"\t\tCurrent level worry is divisible by {self.test_divisor}")
@@ -122,6 +123,7 @@ class Troop:
     def __init__(self):
         self.monkeys = {}
         self.is_hopeful = True
+        self.max_divisor = 1
 
     @classmethod
     def from_file(cls, file: TextIO) -> Troop:
@@ -131,6 +133,7 @@ class Troop:
         for monkey in monkeys:
             monkey.troop = instance
         instance.monkeys = {monkey.index: monkey for monkey in monkeys}
+        instance.max_divisor = functools.reduce(operator.mul, (monkey.test_divisor for monkey in monkeys))
         return instance
 
     def execute_round(self) -> Troop:
@@ -147,16 +150,16 @@ class Troop:
 
 if __name__ == "__main__":
     with open("input.txt", "r") as inp:
-        troop = Troop.from_file(inp)
+        troop_1 = Troop.from_file(inp)
+        troop_2 = copy.deepcopy(troop_1)
 
     for keepaway_round in range(1, 21):
-        troop.execute_round()
+        troop_1.execute_round()
 
-    print(f"Part 1: {troop.monkey_business}")
+    print(f"Part 1: {troop_1.monkey_business}")
 
-    troop.is_hopeful = False
-    for keepaway_round in range(21, 10001):
-        troop.execute_round()
+    troop_2.is_hopeful = False
+    for keepaway_round in range(10000):
+        troop_2.execute_round()
 
-    # Todo: Refactor with modular adds / multiplications to avoid overflow problems
-    print(f"Part 2: {troop.monkey_business}")
+    print(f"Part 2: {troop_2.monkey_business}")
