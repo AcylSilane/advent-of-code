@@ -88,7 +88,9 @@ class Monkey:
         self.items_inspected += 1
         logger.debug(f"\tMonkey inspects an item with a worry level of {item.worry}")
         old_worry = item.worry
-        new_worry = self.worry_update_fun(old_worry) % self.troop.max_divisor
+        new_worry = self.worry_update_fun(old_worry)
+        if not self.troop.is_hopeful:
+            new_worry %= self.troop.max_divisor
         item.worry = new_worry
         logger.debug(f"\t\tWorry level is now {item.worry}.")
 
@@ -109,7 +111,7 @@ class Monkey:
             item = self.items.pop(0)
             self.inspect_item(item)
             if self.troop.is_hopeful:
-                item.worry = int(math.floor(item.worry / 3)) % self.troop.max_divisor
+                item.worry = int(math.floor(item.worry / 3))
             logger.debug(f"\t\tMonkey gets bored with item. Worry level is divided by 3 to {item.worry}")
             if self.is_worried(item):
                 logger.debug(f"\t\tCurrent level worry is divisible by {self.test_divisor}")
@@ -153,7 +155,7 @@ if __name__ == "__main__":
         troop_1 = Troop.from_file(inp)
         troop_2 = copy.deepcopy(troop_1)
 
-    for keepaway_round in range(1, 21):
+    for keepaway_round in range(20):
         troop_1.execute_round()
 
     print(f"Part 1: {troop_1.monkey_business}")
