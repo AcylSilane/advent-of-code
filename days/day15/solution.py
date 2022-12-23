@@ -33,23 +33,6 @@ def calculate_line_overlap(sensors, radii, overlapping_beacons, target_y):
     result += (leq & geq).sum()
     return result
 
-
-def get_points_outside_radius(sensor: Tuple[int, int], radius: int):
-    x, y = sensor
-    y_U = np.arange(y, y + radius + 2)
-    x_R = np.arange(x, x + radius + 2)
-    y_D = np.arange(y - radius - 1, y + 1)
-    x_L = np.arange(x - radius - 1, x + 1)
-
-    points = np.vstack([
-        np.vstack([y_U[::-1], x_R]).T,  # UR
-        np.vstack([y_U, x_L]).T,  # UL
-        np.vstack([y_D, x_R]).T,  # DR
-        np.vstack([y_D[::-1], x_L]).T  # DL
-    ])
-    return points
-
-
 if __name__ == "__main__":
     TARGET_Y = 10  # 2000000
     LIMIT = 4000000
