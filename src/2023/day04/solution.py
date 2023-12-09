@@ -63,9 +63,7 @@ class Card:
 
     @staticmethod
     def add_dicts(d1: Dict[int, int], d2: Dict[int, int]) -> Dict[int, int]:
-        """Add two dictionaries together. We know the keys are the same, don't need to check"""
         return {k: d1[k] + d2[k] for k in d1}
-
 
 
 with open("input.txt") as inp:
@@ -74,7 +72,6 @@ with open("input.txt") as inp:
         card = Card.from_string(line)
         cards[card.index] = card
 
-# Set the deck
 for card in cards.values():
     card.deck = cards
 
