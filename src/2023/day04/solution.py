@@ -81,10 +81,7 @@ for card in cards.values():
 part1_score = sum(card.part1_score for card in cards.values())
 print(f"Part 1: {part1_score}")
 
-# For part 2, every child card has to have an index higher than the parent
-# So, if we iterate from the reverse, we can only hit the base case before the parent
-
 part2_sums = {index: 0 for index in cards}
-for card in reversed(cards.values()):
+for card in cards.values():
     part2_sums = Card.add_dicts(part2_sums, card.explode())
 print(f"Part 2: {sum(part2_sums.values())}")
