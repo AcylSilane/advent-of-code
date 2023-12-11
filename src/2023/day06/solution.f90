@@ -1,7 +1,7 @@
 ! Day 6 2023
 ! Just a little fortran for fun
 ! Compile and run with gfortran -O3 -Wall solution.f90 -o solution && ./solution
-! Runs in about 100ms on my machine, most of which is Part 2
+! Runs in about 25ms on my machine, most of which is Part 2
 
 program solution
     implicit none
@@ -74,7 +74,7 @@ contains
     function count_wins(total_time, distance_record) result(num_wins)
         implicit none
         integer(kind = 8), intent(in) :: total_time, distance_record
-        integer(kind = 8) :: hold_time, num_wins, distances(0:total_time)
+        integer(kind = 8) :: hold_time, num_wins
 
         num_wins = 0
 
@@ -83,8 +83,7 @@ contains
         ! feasible hold times without needing to loop over everything. That'd reduce the execution time to basically
         ! nothing
         do hold_time = 0, total_time
-            distances(hold_time) = hold_time * (total_time - hold_time)
-            if (distances(hold_time) > distance_record) then
+            if ( (hold_time * (total_time - hold_time)) > distance_record) then
                 num_wins = num_wins + 1
             end if
         end do
